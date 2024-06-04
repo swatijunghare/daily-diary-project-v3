@@ -1,0 +1,154 @@
+<div class="container">
+  <!--1st row-->
+  <div class="row">
+    <div class="col-6"><app-nav-menu></app-nav-menu></div>
+    <div class="col-6">
+      <div class="row">
+        <div class="col">
+          <div class="d-flex justify-content-end mt-3">
+            <button (click)="go_to_login()" class="btn btn-success">Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--2nd row-->
+  <div class="row">
+    <div class="col-4 text-left">
+      <h4> {{email}}</h4>
+    </div>
+    <div class="col-8 text-right">
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th scope="col">Full Name</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of studentData">
+            <td>{{data.fullname}}</td>
+            <td><button class="btn btn-info" (click)="selectStudent(data.stud_Id)">Select Student</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!------show data of selected student (id) in table--------->
+<table class="table mt-3" *ngIf="selectedStudent">
+  <thead>
+    <tr>
+      <th scope="col">Full Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Mobile</th>
+      <th scope="col">Academic Year</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ selectedStudent.fullname }}</td>
+      <td>{{ selectedStudent.email }}</td>
+      <td>{{ selectedStudent.mobile }}</td>
+      <td>{{ selectedStudent.academicyear }}</td>
+      <!-- <td>
+        <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;">
+        <button (click)="fileInput.click()">Fill Daily Diary</button>
+      </td> -->
+      <!-- app.component.html -->
+      <div>
+        <input type="file" (change)="onFileSelected($event)" style="display: none;" #fileInput>
+        <button (click)="fileInput.click()">Select and Upload Image</button>
+      </div>
+    </tr>
+  </tbody>
+</table>
+
+<!--json data from daily diary scanned form-->
+<div class="container border border-warning" *ngIf="showDailyDiarySection">
+  <div class="row">
+    <div class="col">
+      <h4 class="text-center">{{studentDataFromJson.targetName}}</h4>
+      
+    </div>
+  </div>
+  <!-- <div class="row border-bottom">
+    <h6>Name: {{studentDataFromJson.fieldInfo.Name | titlecase}}</h6>
+  </div> -->
+  <div class="row">
+    <div class="col-2"><h6>Name: {{studentDataFromJson.fieldInfo.Name | titlecase}}</h6></div>
+    <div class="col-1">Student ID :</div>
+    <div class="col-1 border mt-1" style="text-align: left;">{{studentDataFromJson.fieldInfo.StudentID}}</div>
+    <div class="col-1">Month :</div>
+    <div class="col-1 border mt-1">{{studentDataFromJson.fieldInfo.Month}}</div>
+    <div class="col-1">Year :</div>
+    <div class="col-1 border">{{studentDataFromJson.fieldInfo.Year}}</div>
+    <!-- <div class="col-2">Academic Year :</div>
+    <div class="col-2 border mt-1">{{studentDataFromJson.fieldInfo.AcademicYear}}</div> -->
+  </div>
+  <!-- <div class="row">
+    <div class="col-1">Month :</div>
+    <div class="col-2 border mt-1">{{studentDataFromJson.fieldInfo.Month}}</div>
+    <div class="col-1">Year :</div>
+    <div class="col-2 border">{{studentDataFromJson.fieldInfo.Year}}</div>
+    <div class="col-1">Job Role :</div>
+    <div class="col-4 border mt-1">{{studentDataFromJson.fieldInfo.JobRole}}</div>
+  </div> -->
+<br>
+  <table class="table table-bordered">
+    <tr>
+      <td class="border-left" rowspan="3">Task</td>
+      <td class="border-left">Day Of Month</td>
+      <td class="border-left" *ngFor="let MonthDay of  MonthDaysData">{{ studentDataFromJson?.fieldInfo[MonthDay]}}</td>
+    </tr>
+    <tr>
+      <td class="border-left">Hours</td>
+      <td class="border-left" *ngFor="let Hour of HoursData">{{ studentDataFromJson?.fieldInfo[Hour]}}</td>
+    </tr>
+    <tr>
+      <td class="border-left">Minutes</td>
+      <td class="border-left" *ngFor="let Minute of MinutesData">{{ studentDataFromJson?.fieldInfo[Minute]}}</td>
+    </tr>
+    <ng-container *ngFor="let task of taskData">
+      <tr>
+        <td class="border-left" colspan="2">{{ task.TaskName }}</td>
+        <td class="border-left" *ngFor="let tick of task.TaskTicks">{{ tick }}</td>
+      </tr>
+    </ng-container>
+  </table>
+  <div class="row">
+    <div class="col"> <h6>{{ studentDataFromJson?.fieldInfo.OverallInternshipExperience}}</h6></div>
+  </div>
+
+</div>
+<br>
+
+<!--Sorted Data which is sending to Database-->
+<Div *ngIf="isIdMatching">
+  <button (click)="finalDDTableRecord()">Daily Diary</button><br><br>
+   <table class="table table-bordered" *ngIf="showFinalDDTable">
+    <thead>
+      <tr class="table-info">
+        <th>Task Name</th>
+        <th>Performed</th>
+        <th>Date</th>
+        <th>Hour</th>
+        <th>Minutes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of sortedData">
+        <td>{{ data.TaskName }}</td>
+        <td>{{ data.Performed }}</td>
+        <td>{{ data.Date }}</td>
+        <td>{{ data.hour }}</td>
+        <td>{{ data.Minutes }}</td>
+      </tr>
+    </tbody>
+  </table> 
+</Div>
+<br>
+  
